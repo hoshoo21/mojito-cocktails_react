@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { SplitText } from 'gsap/all'
+import { useMediaQuery } from 'react-responsive'
 const Hero = props => {
+    const videoRef= useRef(null);
+    const isMobile = useMediaQuery({maxWidth:767});
     useGSAP(()=>{
         const heroSplit = new SplitText('.title',{type:'chars,words'});
         const paraSplit = new SplitText('.subtitle', {type:'lines'});
@@ -33,11 +36,43 @@ const Hero = props => {
             }
         })
         .to('.right-leaf',{y:200},0)
-        .to('.left-leaf',{y:-200},0)
+        .to('.left-leaf',{y:-200},0);
+        const startValue = isMobile? "top 50%":"center 60";
+        const endValue =  isMobile ? "120% top":"bottom top";
+        const tl = gsap.timeline({
+            scrollTrigger:{
+                trigger:videoRef.current,
+                start : startValue,
+                end : endValue,
+                pin:true,
+                onEnter:()=>{
+                    videoRef.current.currentTime=0;
+                },
+                onLeaveBack:()=>{
+                    videoRef.current.currentTime=0;
+                    tl.restart();
+                }
+            }
+        })
+        videoRef.current.onloadedmetadata=()=>{
+            tl.to(videoRef.current, {
+                currentTime: videoRef.current.duration,
+                ease: "none",
+              });
+        }
+        
     },[])
    return (
    <>
     <section id="hero" className='noisy'>
+    <div className='video-absolute inset-0'>
+        <video
+            ref ={videoRef} 
+            src='/videos/output.mp4' 
+            muted
+            playsInline
+            preload="auto"></video>
+     </div>  
     <h1 className="title">MOJITO</h1>
         
         <img src= "/images/hero-left-leaf.png" atl="left-leaf" className='left-leaf'/>
@@ -64,6 +99,7 @@ const Hero = props => {
           </div> 
         </div>
     </section>
+    
    </>
   )
 }
