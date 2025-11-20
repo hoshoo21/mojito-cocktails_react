@@ -6,7 +6,6 @@
   src: url("/fonts/Modern Negra Demo.ttf") format("truetype");
 }
 
-
 @theme {
   --color-yellow: #e7d393;
   --color-white-100: #efefef;
@@ -14,6 +13,7 @@
   --font-modern-negra: "Modern Negra", sans-serif;
   --font-serif: "DM Serif Text", serif;
 }
+
 html,
 body {
   width: 100%;
@@ -22,9 +22,10 @@ body {
   scroll-behavior: smooth;
   overflow-x: hidden;
 }
-@utility flex-center{
-  @apply flex justify-center items-center
-} 
+
+@utility flex-center {
+  @apply flex justify-center items-center;
+}
 
 @utility col-center {
   @apply flex flex-col justify-center items-center;
